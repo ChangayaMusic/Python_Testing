@@ -41,14 +41,35 @@ def book(competition,club):
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
-@app.route('/purchasePlaces',methods=['POST'])
+
+@app.route('/purchasePlaces', methods=['POST'])
 def purchasePlaces():
-    competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-    club = [c for c in clubs if c['name'] == request.form['club']][0]
-    placesRequired = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-    flash('Great-booking complete!')
+    competition_name = request.form['competition']
+    club_name = request.form['club']
+    places_required = int(request.form['places'])
+
+    # Find the competition and club
+    competition = next((c for c in competitions if c['name'] == competition_name), None)
+    club = next((c for c in clubs if c['name'] == club_name), None)
+
+    if competition and club:
+        # Check available points
+        if int(club['points']) >= places_required:
+            # Check competition constraints
+            if 0 < places_required <= 12 and places_required <= int(competition['numberOfPlaces']):
+                # Deduct points and update competition places
+                club['points'] = str(int(club['points']) - places_required)
+                competition['numberOfPlaces'] = str(int(competition['numberOfPlaces']) - places_required)
+                flash('Great-booking complete!')
+            else:
+                flash('Invalid booking - Check available places or maximum limit.')
+        else:
+            flash('Insufficient points to make the booking.')
+
     return render_template('welcome.html', club=club, competitions=competitions)
+
+
+
 
 
 @app.route('/points')
