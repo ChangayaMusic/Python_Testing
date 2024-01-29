@@ -2,6 +2,9 @@ bin
 include
 lib
 .Python
-
+/venv
 .envrc
 __pycache__
+venv/
+clubs.json
+competitions.json
