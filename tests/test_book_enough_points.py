@@ -3,7 +3,7 @@ from unittest.mock import patch
 from flask import Flask, flash
 from server import app, purchasePlaces, clubs, competitions
 
-class BookMoreThanPointsTest(unittest.TestCase):
+class BookPointsTest(unittest.TestCase):
     def setUp(self):
         # Create a test client
         self.app = app.test_client()
