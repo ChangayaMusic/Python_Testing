@@ -3,7 +3,7 @@ import json
 from server import app, loadClubs, loadCompetitions, saveClubs, saveCompetitions
 
 
-class TestPurchasePlaces(unittest.TestCase):
+class TestUpdatePoints(unittest.TestCase):
 
     def setUp(self):
         # Load initial data before each test
