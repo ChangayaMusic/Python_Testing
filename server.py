@@ -71,18 +71,22 @@ def purchasePlaces():
     club = next((c for c in clubs if c['name'] == club_name), None)
 
     if competition and club:
-        # Convert to int before subtraction
-        competition['numberOfPlaces'] = int(
-            competition['numberOfPlaces']) - placesRequired
-        # Convert to int before subtraction
-        club['points'] = int(club['points']) - placesRequired
+        if placesRequired <= int(club['points']):
+            # Convert to int before subtraction
+            competition['numberOfPlaces'] = int(
+                competition['numberOfPlaces']) - placesRequired
+            # Convert to int before subtraction
+            club['points'] = int(club['points']) - placesRequired
 
-        saveClubs(clubs)
-        saveCompetitions(competitions)
+            saveClubs(clubs)
+            saveCompetitions(competitions)
 
-        flash('Great-booking complete!')
+            flash('Great-booking complete!')
+        else:
+            flash(f"Not enough points in this club to book ")
     else:
         flash("Something went wrong-please try again")
+
 
     return render_template('welcome.html', club=club, competitions=competitions)
 
