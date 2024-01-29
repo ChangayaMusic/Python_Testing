@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from server import app
 
 
-class TestBooking(unittest.TestCase):
+class TestBookingPast(unittest.TestCase):
     def setUp(self):
         # Set up your test data, including clubs and competitions
         self.clubs = [
