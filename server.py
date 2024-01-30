@@ -1,5 +1,7 @@
 import json
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask,render_template,request,redirect,flash,url_for
+from datetime import datetime
+
 
 
 def loadClubs():
@@ -53,14 +55,21 @@ def showSummary():
 def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
+
     if foundClub and foundCompetition:
+        competition_date = datetime.strptime(foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
+
+        current_date = datetime.now()
+
+        if competition_date < current_date:
+            flash("Error: Competition date is in the past")
+            return render_template('welcome.html', club=club, competitions=competitions)
+
         return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
         flash("Something went wrong-please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
-
-
-@app.route('/purchasePlaces', methods=['POST'])
+@app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
     competition_name = request.form['competition']
     club_name = request.form['club']
