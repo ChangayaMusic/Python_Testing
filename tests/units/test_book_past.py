@@ -48,4 +48,4 @@ class TestBookingPast(unittest.TestCase):
 
             # Check if the flash message is displayed
             self.assertIn(b"Error: Competition date is in the past", response.data)
-
+    
