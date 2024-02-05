@@ -29,11 +29,6 @@ class TestFlaskApp(unittest.TestCase):
                     app.config['TESTING'] = True
                     self.app = app.test_client()
 
-    def tearDown(self):
-        # Reset data after each test
-        self.initial_clubs = []
-        self.initial_competitions = []
-
     def test_index_route(self):
         with self.app as client:
             response = client.get('/')

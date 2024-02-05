@@ -32,12 +32,6 @@ class TestBooking(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    @classmethod
-    def tearDownClass(cls):
-        # Clean up: Reset data files to their original state
-        saveClubs([])
-        saveCompetitions([])
-
     def test_purchase_places(self):
         # Mock the user input in the form
         form_data = {

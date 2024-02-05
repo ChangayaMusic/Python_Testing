@@ -1,20 +1,9 @@
 import unittest
-import json
-from server import app, loadClubs, loadCompetitions, saveClubs, saveCompetitions
 
+from server import app, loadClubs, loadCompetitions
+from tests.generic.base_test import GulfTestCase
 
-class TestUpdatePoints(unittest.TestCase):
-
-    def setUp(self):
-        # Load initial data before each test
-        self.initial_clubs = loadClubs()
-        self.initial_competitions = loadCompetitions()
-
-    def tearDown(self):
-        # Reset data after each test
-        saveClubs(self.initial_clubs)
-        saveCompetitions(self.initial_competitions)
-
+class TestUpdatePoints(GulfTestCase):
     def test_purchase_places(self):
         # Simulate a purchase
         club_name = "Simply Lift"
