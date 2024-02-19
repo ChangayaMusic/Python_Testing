@@ -6,7 +6,6 @@ def test_page_ok():
     response = get("http://127.0.0.1:5000/points")
     assert response.status_code == 200
 
-
 def test_page_ok_if_logged():
     user_session = session()
     response = user_session.post("http://127.0.0.1:5000/showSummary", data={"email": "admin@irontemple.com"})
@@ -18,30 +17,25 @@ def test_page_structure():
     response = get("http://127.0.0.1:5000/points")
     
     with open('clubs.json', 'r') as clubs_file:
-        data = clubs_file.read()
+        data = loads(clubs_file.read())
     
-    clubs_data = loads(data)
     soup = BeautifulSoup(response.text, 'html.parser')
     # There should be a table in html with points
     table = soup.find('table')
-    # Verify there is not unknown club in table
+    # Verify there is not an unknown club in the table
     for row in table.find('tbody').find_all('tr'):
         valid_club = None
         columns = row.find_all('td')
-        # Check if there is the name in table
+        # Check if there is the name in the table
         for column in columns:
-            for club in clubs_data['clubs']:
+            for club in data['clubs']:
                 if club['name'] == column.text.strip():
                     valid_club = club
+                    break  # Break the loop if the club is found
 
-        points = 0
-        try:
-            points = int(column.text.strip())
-        except:
-            pass
-        else:
-            # Verify if points amount in html is the same as in json
-            assert int(valid_club["points"]) == points
+            # Check if the points are present in the table
+            points = column.text.strip()
+            assert str(valid_club.get("points", "")) == points, f"Expected points: {valid_club.get('points')}, Actual points: {points}"
 
-        # if name not in table, test is failed
-        assert valid_club
+        # Ensure that a valid club was found for each column in the row
+        assert valid_club is not None, "No valid club found for the row"
